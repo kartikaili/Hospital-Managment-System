@@ -54,7 +54,6 @@ public class Doctorspage extends JFrame {
 	private JTextField ph_no;
 	private JTextField city;
 	private JTextField jng_date;
-	private JTextField textField_8;
 	private JTextField age2;
 	private JTextField address2;
 	private JTextField phno2;
@@ -73,7 +72,6 @@ public class Doctorspage extends JFrame {
 	private JTextField phno1;
 	private JTextField city1;
 	private JTextField jng_date1;
-	private JTextField textField_27;
 	private JTextField username1;
 	private JPasswordField password1;
 	private JTextField username2;
@@ -296,17 +294,11 @@ public class Doctorspage extends JFrame {
 		jng_date.setBounds(133, 454, 167, 28);
 		panel_3.add(jng_date);
 		
-		JLabel lblVisitTiming = new JLabel("Visit Timing");
-		lblVisitTiming.setForeground(new Color(0, 153, 255));
-		lblVisitTiming.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblVisitTiming.setBounds(356, 463, 107, 19);
-		panel_3.add(lblVisitTiming);
-		
-		textField_8 = new JTextField();
-		textField_8.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textField_8.setColumns(10);
-		textField_8.setBounds(483, 454, 167, 28);
-		panel_3.add(textField_8);
+		JLabel lbldept = new JLabel("Department");
+		lbldept.setForeground(new Color(0, 153, 255));
+		lbldept.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lbldept.setBounds(356, 463, 107, 19);
+		panel_3.add(lbldept);
 		
 		Border br=BorderFactory.createLineBorder(new Color(0,153,255));
 		
@@ -459,6 +451,26 @@ public class Doctorspage extends JFrame {
 		password.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		password.setBounds(875, 483, 167, 28);
 		panel_3.add(password);
+		
+		JComboBox doc_dept = new JComboBox();
+		doc_dept.setBounds(483, 460, 167, 29);
+		panel_3.add(doc_dept);
+		
+		try{
+			Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
+			stmt = conn.createStatement();
+			
+			ResultSet rs=stmt.executeQuery("SELECT DEPT_NAME FROM Department_details ORDER BY dept_no ASC");
+			while(rs.next()){
+				
+				doc_dept.addItem(rs.getString(1));
+				//comboBox.getSelectedItem();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon("C:\\Users\\HP\\Desktop\\Hospital MAnagement System\\Images\\899156.jpg"));
@@ -633,18 +645,6 @@ public class Doctorspage extends JFrame {
 		jng_date1.setBounds(133, 463, 167, 28);
 		panel_4.add(jng_date1);
 		
-		JLabel label_28 = new JLabel("Visit Timing");
-		label_28.setForeground(new Color(0, 153, 255));
-		label_28.setFont(new Font("Tahoma", Font.BOLD, 16));
-		label_28.setBounds(356, 472, 107, 19);
-		panel_4.add(label_28);
-		
-		textField_27 = new JTextField();
-		textField_27.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textField_27.setColumns(10);
-		textField_27.setBounds(483, 463, 167, 28);
-		panel_4.add(textField_27);
-		
 		Border brd=BorderFactory.createLineBorder(new Color(0,153,255));
 		JButton btnDeleteDoctor = new JButton("Delete Doctor");
 		btnDeleteDoctor.addActionListener(new ActionListener() {
@@ -754,6 +754,16 @@ public class Doctorspage extends JFrame {
 		btnSearch.setBounds(346, 129, 161, 33);
 		btnSearch.setBorder(br);
 		panel_4.add(btnSearch);
+		
+		JLabel label_16 = new JLabel("Department");
+		label_16.setForeground(new Color(0, 153, 255));
+		label_16.setFont(new Font("Tahoma", Font.BOLD, 16));
+		label_16.setBounds(356, 465, 107, 19);
+		panel_4.add(label_16);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(483, 462, 167, 29);
+		panel_4.add(comboBox);
 		
 		JLabel label_1 = new JLabel("");
 		label_1.setIcon(new ImageIcon("C:\\Users\\HP\\Desktop\\Hospital MAnagement System\\Images\\899156.jpg"));
