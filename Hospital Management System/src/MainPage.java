@@ -84,12 +84,16 @@ public class MainPage extends JFrame {
 		JButton btnReceptionlist = new JButton("RECEPTIONIST");
 		btnReceptionlist.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				Recpt_work rp_w=new Recpt_work();
+				rp_w.setVisible(true);
+				rp_w.setLocationRelativeTo(null);;
+				dispose();
 			}
 		});
 		
 		btnReceptionlist.setForeground(new Color(0, 153, 255));
 		btnReceptionlist.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnReceptionlist.setBackground(Color.WHITE);
+		btnReceptionlist.setBackground(UIManager.getColor("Button.highlight"));
 		btnReceptionlist.setOpaque(true);
 		btnReceptionlist.setBounds(452, 441, 157, 36);
 		panel.add(btnReceptionlist);
@@ -108,7 +112,7 @@ public class MainPage extends JFrame {
 		
 		btnDoctor.setForeground(new Color(0, 153, 255));
 		btnDoctor.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnDoctor.setBackground(Color.WHITE);
+		btnDoctor.setBackground(UIManager.getColor("Button.highlight"));
 		btnDoctor.setBounds(723, 441, 118, 36);
 		panel.add(btnDoctor);
 		
@@ -121,7 +125,7 @@ public class MainPage extends JFrame {
 		btnPharmacy.setOpaque(true);
 		btnPharmacy.setForeground(new Color(0, 153, 255));
 		btnPharmacy.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnPharmacy.setBackground(Color.WHITE);
+		btnPharmacy.setBackground(UIManager.getColor("Button.highlight"));
 		btnPharmacy.setBounds(938, 441, 118, 36);
 		panel.add(btnPharmacy);
 		

@@ -270,23 +270,29 @@ public class Patientpage extends JFrame {
 					conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
 					stmt = conn.createStatement();
 					
-					String pid=P_id1.getText().trim();
-					String fname=fname1.getText().trim();
-					String lname=lname1.getText().trim();
-					String Age=age1.getText().trim();
-					String bld_grp=(String) bldgrp1.getItemAt(bldgrp1.getSelectedIndex());
-					String gendr=(String) gdr1.getItemAt(gdr1.getSelectedIndex());
-					String adrs=address1.getText();
-					long phno=Long.parseLong(phno1.getText());
-					String cty=city1.getText();
-					String pdate=pdate1.getText().trim();
-					
-					int patient_insert=stmt.executeUpdate("insert into patient_details values('"+pid+"','"+fname+"','"+lname+"','"+Age+"','"+bld_grp+"','"+gendr+"','"+adrs+"','"+phno+"','"+cty+"', TO_DATE('"+pdate+"','DD-MM-YYYY'))");
-					if(patient_insert==1){
-						JOptionPane.showMessageDialog(null,"Record Inserted Sucessfully");
+					String pid=P_id1.getText().toUpperCase().trim();
+					ResultSet rs_expt=stmt.executeQuery("select * from patient_details where P_ID='"+pid+"'");
+					if(rs_expt.next()){
+						JOptionPane.showMessageDialog(null, "patient ID already Exist");
 					}else{
-						JOptionPane.showMessageDialog(null,"Record Inserted UnSucessfully");
+						String fname=fname1.getText().trim();
+						String lname=lname1.getText().trim();
+						String Age=age1.getText().trim();
+						String bld_grp=(String) bldgrp1.getItemAt(bldgrp1.getSelectedIndex());
+						String gendr=(String) gdr1.getItemAt(gdr1.getSelectedIndex());
+						String adrs=address1.getText();
+						long phno=Long.parseLong(phno1.getText());
+						String cty=city1.getText();
+						String pdate=pdate1.getText().trim();
+						
+						int patient_insert=stmt.executeUpdate("insert into patient_details values('"+pid+"','"+fname+"','"+lname+"','"+Age+"','"+bld_grp+"','"+gendr+"','"+adrs+"','"+phno+"','"+cty+"', TO_DATE('"+pdate+"','DD-MM-YYYY'))");
+						if(patient_insert==1){
+							JOptionPane.showMessageDialog(null,"Record Inserted Sucessfully");
+						}else{
+							JOptionPane.showMessageDialog(null,"Record Inserted UnSucessfully");
+						}
 					}
+					
 					
 				}catch(Exception e){
 					e.printStackTrace();
@@ -505,11 +511,17 @@ public class Patientpage extends JFrame {
 					conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
 					stmt = conn.createStatement();
 					String id_dlt=P_id2.getText().trim();
-					int rs2=stmt.executeUpdate("delete from patient_details where P_ID='"+id_dlt+"'");
-					if(rs2==1){
-						JOptionPane.showMessageDialog(null, "Record Deleted Succesfully");
+					ResultSet rs_expt=stmt.executeQuery("select * from patient_details where P_ID='"+id_dlt+"'");
+					if(rs_expt.next()){
+						
+						int rs2=stmt.executeUpdate("delete from patient_details where P_ID='"+id_dlt+"'");
+						if(rs2==1){
+							JOptionPane.showMessageDialog(null, "Record Deleted Succesfully");
+						}else{
+							JOptionPane.showMessageDialog(null, "Record not deleted");
+						}
 					}else{
-						JOptionPane.showMessageDialog(null, "Record not deleted");
+						JOptionPane.showMessageDialog(null, "patient ID does not Exist");
 					}
 				}catch(Exception e){
 					e.printStackTrace();
@@ -763,7 +775,7 @@ public class Patientpage extends JFrame {
 					conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
 					stmt = conn.createStatement();
 					
-					String pid=P_id3.getText().trim();
+					String pid=P_id3.getText().toUpperCase().trim();
 					String fname=fname3.getText().trim();
 					String lname=lname3.getText().trim();
 					String Age=age3.getText().trim();

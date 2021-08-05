@@ -94,7 +94,7 @@ public class Adminlogin extends JFrame {
 				dispose();
 			}
 		});
-		button.setIcon(new ImageIcon("C:\\Users\\HP\\Desktop\\Hospital MAnagement System\\Images\\back (2).png"));
+		button.setIcon(new ImageIcon(Adminlogin.class.getResource("/Images/back (2).png")));
 		button.setBounds(0, 126, 93, 59);
 		
 		panel.add(button);
