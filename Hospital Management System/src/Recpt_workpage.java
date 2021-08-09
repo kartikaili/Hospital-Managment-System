@@ -59,7 +59,10 @@ public class Recpt_workpage extends JFrame {
 		JButton btnCreateAppointment = new JButton("CREATE APPOINTMENT");
 		btnCreateAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				Doctor_Appointments da=new Doctor_Appointments();
+				da.setVisible(true);
+				da.setLocationRelativeTo(null);
+				da.setResizable(false);
 			}
 		});
 		btnCreateAppointment.setForeground(new Color(30, 144, 255));
@@ -69,6 +72,14 @@ public class Recpt_workpage extends JFrame {
 		panel.add(btnCreateAppointment);
 		
 		JButton btnDoctorDetails = new JButton("DOCTOR DETAILS");
+		btnDoctorDetails.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Recpt_Doctor_details rd=new Recpt_Doctor_details();
+				rd.setVisible(true);
+				rd.setLocationRelativeTo(null);
+				rd.setResizable(false);
+			}
+		});
 		btnDoctorDetails.setForeground(new Color(30, 144, 255));
 		btnDoctorDetails.setFont(new Font("Tahoma", Font.BOLD, 16));
 		btnDoctorDetails.setBounds(132, 313, 227, 44);

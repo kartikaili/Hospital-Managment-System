@@ -31,6 +31,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+
+import com.toedter.calendar.JDateChooser;
 
 
 public class ReceptionistPage extends JFrame {
@@ -60,7 +63,7 @@ public class ReceptionistPage extends JFrame {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
 			stmt = conn.createStatement();
 			//PreparedStatement pst = conn.prepareStatement("SELECT * FROM Receptionist_details");
-			ResultSet rs=stmt.executeQuery("select * from Receptionist_details");
+			ResultSet rs=stmt.executeQuery("select * from Receptionist_details ORDER BY R_ID ASC");
 			//if(rs.next()){
 				table.setModel(DbUtils.resultSetToTableModel(rs));
 			//}
@@ -77,6 +80,7 @@ public class ReceptionistPage extends JFrame {
 					ReceptionistPage frame = new ReceptionistPage();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
+					frame.showTableData();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -210,7 +214,8 @@ public class ReceptionistPage extends JFrame {
 		
 		R_date = new JTextField();
 		R_date.setColumns(10);
-		R_date.setBounds(283, 325, 167, 28);
+		R_date.setBounds(283, 353, 167, 28);
+		R_date.setEditable(false);
 		panel_3.add(R_date);
 		
 		JLabel lblSearch = new JLabel("DATE");
@@ -241,6 +246,11 @@ public class ReceptionistPage extends JFrame {
 		gdr.setBounds(633, 153, 167, 28);
 		panel_3.add(gdr);
 		
+		final JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBackground(Color.WHITE);
+		dateChooser.setBounds(283, 325, 167, 28);
+		panel_3.add(dateChooser);
+		
 		JButton btnAddRecp = new JButton("Add RECP");
 		btnAddRecp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -262,7 +272,9 @@ public class ReceptionistPage extends JFrame {
 					String adrs=address.getText();
 					long phno=Long.parseLong(ph_no.getText());
 					String cty=city.getText();
-					String pdate=R_date.getText().trim();
+					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+					String pdate=sdf.format(dateChooser.getDate());
+					//String pdate=R_date.getText().trim();
 					String pass=new String(password.getPassword());
 					
 					int RP_insert=stmt.executeUpdate("insert into Receptionist_details values('"+rid+"','"+Fname+"','"+Lname+"','"+Age+"','"+gendr+"','"+adrs+"','"+phno+"','"+cty+"', TO_DATE('"+pdate+"','DD-MM-YYYY'),'"+pass+"')");
@@ -364,7 +376,9 @@ public class ReceptionistPage extends JFrame {
 					String adrs=address.getText();
 					long phno=Long.parseLong(ph_no.getText());
 					String cty=city.getText();
-					String rdate=R_date.getText().trim();
+					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+					String rdate=sdf.format(dateChooser.getDate());
+					//String rdate=R_date.getText().trim();
 					String pass=new String(password.getPassword());
 					
 					int RP_insert=stmt.executeUpdate("update Receptionist_details set FNAME='"+Fname+"', LNAME='"+Lname+"',AGE='"+Age+"',GENDER='"+gendr+"',ADDRESS='"+adrs+"', PHONE_NO='"+phno+"', CITY='"+cty+"',R_DATE=TO_DATE('"+rdate+"','DD-MM-YYYY'), R_Password='"+pass+"' where R_ID='"+rid+"'");
@@ -413,6 +427,10 @@ public class ReceptionistPage extends JFrame {
 		panel_3.add(label_8);
 		
 		JButton button_3 = new JButton("BROWSE");
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		button_3.setForeground(new Color(30, 144, 255));
 		button_3.setFont(new Font("Tahoma", Font.BOLD, 16));
 		button_3.setBounds(920, 325, 161, 33);
@@ -468,6 +486,7 @@ public class ReceptionistPage extends JFrame {
 		button_1.setBounds(653, 24, 161, 33);
 		panel_3.add(button_1);
 		
+
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon("C:\\Users\\HP\\Desktop\\Hospital MAnagement System\\Images\\back1.jpg"));
 		label.setBounds(0, 0, 1264, 681);

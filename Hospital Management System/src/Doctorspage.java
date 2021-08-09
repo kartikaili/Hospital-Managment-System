@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.JFrame;
@@ -27,6 +28,8 @@ import java.awt.SystemColor;
 import javax.swing.JPasswordField;
 import javax.swing.DefaultComboBoxModel;
 
+import com.toedter.calendar.JDateChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -39,6 +42,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -53,13 +57,11 @@ public class Doctorspage extends JFrame {
 	private JTextField address;
 	private JTextField ph_no;
 	private JTextField city;
-	private JTextField jng_date;
 	private JTextField age2;
 	private JTextField address2;
 	private JTextField phno2;
 	private JTextField city2;
 	private JTextField jng_date2;
-	private JTextField textField_14;
 	private JTextField fname2;
 	private JTextField lname2;
 	private JTextField D_ID1;
@@ -281,19 +283,6 @@ public class Doctorspage extends JFrame {
 		lblJoiningDate.setBounds(10, 463, 107, 19);
 		panel_3.add(lblJoiningDate);
 		
-		
-		jng_date = new JTextField("dd-mm-yyyy");
-		jng_date.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				jng_date.setText(null);
-			}
-		});
-		jng_date.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		jng_date.setColumns(10);
-		jng_date.setBounds(133, 454, 167, 28);
-		panel_3.add(jng_date);
-		
 		JLabel lbldept = new JLabel("Department");
 		lbldept.setForeground(new Color(0, 153, 255));
 		lbldept.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -301,6 +290,15 @@ public class Doctorspage extends JFrame {
 		panel_3.add(lbldept);
 		
 		Border br=BorderFactory.createLineBorder(new Color(0,153,255));
+		
+		final JDateChooser jng_date = new JDateChooser();
+		jng_date.setBackground(Color.WHITE);
+		jng_date.setBounds(133,454,167,28);
+		panel_3.add(jng_date);
+		
+		final JComboBox doc_dept = new JComboBox();
+		doc_dept.setBounds(483, 460, 167, 29);
+		panel_3.add(doc_dept);
 		
 		JButton btnAddDoctor = new JButton("ADD Doctor");
 		btnAddDoctor.addActionListener(new ActionListener() {
@@ -328,23 +326,16 @@ public class Doctorspage extends JFrame {
 					long phno=Long.parseLong(ph_no.getText());
 					String cty=city.getText();
 					
-					String jdate=jng_date.getText().trim();
+					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				//	String Appoint_date = sdf.format(dateChooser.getDate());
+					String jdate=sdf.format(jng_date.getDate());
 					//Date d=Date.valueOf(jdate);
 					
+					String d_dept=(String)doc_dept.getItemAt(doc_dept.getSelectedIndex());
 					String usname=username.getText();
 					String pass=new String(password.getPassword());
-					int s=stmt.executeUpdate("insert into dept(D_ID,FNAME,LNAME,AGE,BLD_GRP,GENDER,MARITAL_STS,ADDRESS,PHONE_NO,CITY,USENAME,PASSWORD,JOINING_DATE) values('"+D_id+"','"+fname+"','"+lname+"','"+Age+"','"+bld_grp+"','"+gendr+"','"+mrtsts+"','"+adrs+"','"+phno+"','"+cty+"','"+usname+"','"+pass+"',TO_DATE('"+jdate+"','DD-MM-YYYY'))");
+					int s=stmt.executeUpdate("insert into dept(D_ID,FNAME,LNAME,AGE,BLD_GRP,GENDER,MARITAL_STS,ADDRESS,PHONE_NO,CITY,USENAME,PASSWORD,JOINING_DATE,DEPARTMENT) values('"+D_id+"','"+fname+"','"+lname+"','"+Age+"','"+bld_grp+"','"+gendr+"','"+mrtsts+"','"+adrs+"','"+phno+"','"+cty+"','"+usname+"','"+pass+"',TO_DATE('"+jdate+"','DD-MM-YYYY'),'"+d_dept+"')");
 					
-					/*File file = new File(s);
-					FileInputStream fin=new FileInputStream(new File(s));
-					PreparedStatement ps=conn.prepareStatement("insert into docimge values(?,?)"); 
-					ps.setString(1, D_id);
-					System.out.println(fin);
-					System.out.println(file.length());
-					//ps.setBinaryStream(2,fin,fin.available());
-					ps.setBinaryStream(2,fin,(int)file.length());
-			
-					ps.executeUpdate();*/
 					if(s==1){
 						JOptionPane.showMessageDialog(null,"Record Inserted Sucessfully");
 					}else{
@@ -384,7 +375,7 @@ public class Doctorspage extends JFrame {
 				address.setText(null);
 				ph_no.setText(null);
 				city.setText(null);
-				jng_date.setText(null);
+				
 			}
 		});
 		btnClear.setForeground(new Color(30, 144, 255));
@@ -452,9 +443,7 @@ public class Doctorspage extends JFrame {
 		password.setBounds(875, 483, 167, 28);
 		panel_3.add(password);
 		
-		JComboBox doc_dept = new JComboBox();
-		doc_dept.setBounds(483, 460, 167, 29);
-		panel_3.add(doc_dept);
+		
 		
 		try{
 			Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
@@ -639,9 +628,8 @@ public class Doctorspage extends JFrame {
 		label_27.setBounds(10, 472, 107, 19);
 		panel_4.add(label_27);
 		
-		jng_date1 = new JTextField();
-		jng_date1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		jng_date1.setColumns(10);
+		final JDateChooser jng_date1 = new JDateChooser();
+		jng_date1.setBackground(Color.WHITE);
 		jng_date1.setBounds(133, 463, 167, 28);
 		panel_4.add(jng_date1);
 		
@@ -660,6 +648,8 @@ public class Doctorspage extends JFrame {
 					}else{
 						JOptionPane.showMessageDialog(null, "Record not deleted");
 					}
+				}catch(SQLException e){
+					JOptionPane.showMessageDialog(null, "Doctor cannot be deleted because he has been appointed with patient");
 				}catch(Exception e){
 					e.printStackTrace();
 				}
@@ -709,6 +699,10 @@ public class Doctorspage extends JFrame {
 		password1.setBounds(875, 496, 167, 28);
 		panel_4.add(password1);
 		
+		final JComboBox doc_dept1 = new JComboBox();
+		doc_dept1.setBounds(483, 462, 167, 29);
+		panel_4.add(doc_dept1);
+		
 		JButton btnSearch = new JButton("SEARCH");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -736,9 +730,13 @@ public class Doctorspage extends JFrame {
 					city1.setText(rs.getString(10));
 					username1.setText(rs.getString(11));
 					password1.setText(rs.getString(12));
-					ResultSet rs1=stmt.executeQuery("select TO_CHAR(Joining_date,'DD-MM-YYYY') from dept where D_ID='"+id+"'");
+					doc_dept1.setSelectedItem(rs.getString(14));
+					ResultSet rs1=stmt.executeQuery("select TO_CHAR(Joining_date,'DD MM YYYY') from dept where D_ID='"+id+"'");
 					rs1.next();
-					jng_date1.setText(rs1.getString(1));
+					//String d=rs1.getString(1);
+					//Date jd=Date.valueOf(d);
+					//java.util.Date d2= new SimpleDateFormat("yyyy-MM-dd").parse(d);
+					//jng_date1.setModel(jd);;//.setText(rs1.getString(1));
 					}
 					else{
 						JOptionPane.showMessageDialog(null," Record Not Found");
@@ -761,9 +759,22 @@ public class Doctorspage extends JFrame {
 		label_16.setBounds(356, 465, 107, 19);
 		panel_4.add(label_16);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(483, 462, 167, 29);
-		panel_4.add(comboBox);
+		
+		
+		try{
+			Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
+			stmt = conn.createStatement();
+			
+			ResultSet rs=stmt.executeQuery("SELECT DEPT_NAME FROM Department_details ORDER BY dept_no ASC");
+			while(rs.next()){
+				
+				doc_dept1.addItem(rs.getString(1));
+				//comboBox.getSelectedItem();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
 		JLabel label_1 = new JLabel("");
 		label_1.setIcon(new ImageIcon("C:\\Users\\HP\\Desktop\\Hospital MAnagement System\\Images\\899156.jpg"));
@@ -901,23 +912,14 @@ public class Doctorspage extends JFrame {
 		label_12.setBounds(10, 469, 107, 19);
 		panel_5.add(label_12);
 		
-		jng_date2 = new JTextField();
-		jng_date2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		jng_date2.setColumns(10);
-		jng_date2.setBounds(133, 460, 167, 28);
+		final JDateChooser jng_date2 = new JDateChooser();
+		jng_date2.setBackground(Color.WHITE);
+		jng_date2.setBounds(133, 463, 167, 28);
 		panel_5.add(jng_date2);
 		
-		JLabel label_13 = new JLabel("Visit Timing");
-		label_13.setForeground(new Color(0, 153, 255));
-		label_13.setFont(new Font("Tahoma", Font.BOLD, 16));
-		label_13.setBounds(356, 469, 107, 19);
-		panel_5.add(label_13);
-		
-		textField_14 = new JTextField();
-		textField_14.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textField_14.setColumns(10);
-		textField_14.setBounds(483, 460, 167, 28);
-		panel_5.add(textField_14);
+		final JComboBox doc_dept2 = new JComboBox();
+		doc_dept2.setBounds(483, 459, 167, 29);
+		panel_5.add(doc_dept2);
 		
 		JButton btnUpdateDoctor = new JButton("Update Doctor");
 		btnUpdateDoctor.addActionListener(new ActionListener() {
@@ -938,13 +940,13 @@ public class Doctorspage extends JFrame {
 					long phno_upt=Long.parseLong(phno2.getText());
 					String cty_upt=city2.getText();
 					
-					String jdate_upt=jng_date2.getText().trim();
-					
-					
+					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+					String jdate_upt=sdf.format(jng_date2.getDate());
+					String J_d=(String)doc_dept2.getItemAt(doc_dept2.getSelectedIndex());
 					String usname_upt=username2.getText();
 					String pass_upt=new String(password2.getPassword());
 					//stmt.executeUpdate("insert into dept(D_ID,FNAME,LNAME,AGE,BLD_GRP,GENDER,MARITAL_STS,ADDRESS,PHONE_NO,CITY,USENAME,PASSWORD,JOINING_DATE) values('"+D_id+"','"+fname+"','"+lname+"','"+Age+"','"+bld_grp+"','"+gendr+"','"+mrtsts+"','"+adrs+"','"+phno+"','"+cty+"','"+usname+"','"+pass+"',TO_DATE('"+jdate+"','DD-MM-YYYY'))");
-					int result_upt=stmt.executeUpdate("update dept set FNAME='"+fname_upt+"', LNAME='"+lname_upt+"',AGE='"+Age_upt+"', BLD_GRP='"+bld_grp_upt+"', GENDER='"+gendr_upt+"', MARITAL_STS='"+mrtsts_upt+"',ADDRESS='"+adrs_upt+"', PHONE_NO='"+phno_upt+"', CITY='"+cty_upt+"',USENAME='"+usname_upt+"',PASSWORD='"+pass_upt+"',JOINING_DATE=TO_DATE('"+jdate_upt+"','DD-MM-YYYY') where D_ID='"+ id_upt+"'");
+					int result_upt=stmt.executeUpdate("update dept set FNAME='"+fname_upt+"', LNAME='"+lname_upt+"',AGE='"+Age_upt+"', BLD_GRP='"+bld_grp_upt+"', GENDER='"+gendr_upt+"', MARITAL_STS='"+mrtsts_upt+"',ADDRESS='"+adrs_upt+"', PHONE_NO='"+phno_upt+"', CITY='"+cty_upt+"',USENAME='"+usname_upt+"',PASSWORD='"+pass_upt+"',JOINING_DATE=TO_DATE('"+jdate_upt+"','DD-MM-YYYY'), DEPARTMENT='"+J_d+"' where D_ID='"+ id_upt+"'");
 					if(result_upt==1){
 						JOptionPane.showMessageDialog(null, "Records Updated");
 					}else{
@@ -979,7 +981,7 @@ public class Doctorspage extends JFrame {
 				address2.setText(null);
 				phno2.setText(null);
 				city2.setText(null);
-				jng_date2.setText(null);
+				//jng_date2.setText(null);
 				
 			}
 		});
@@ -1055,35 +1057,12 @@ public class Doctorspage extends JFrame {
 		docimg1.setBorder(br);
 		panel_5.add(docimg1);
 		
+		
+		
 		JButton button_6 = new JButton("SEARCH");
 		button_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				/*try{
-					Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
-					conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
-					stmt = conn.createStatement();
-					System.out.println("dat base Connected");
-					// PreparedStatement pst = conn.prepareStatement( "select IMAGE from docimge where D_ID=?");
-			          //  pst.setString(1,D_ID1.getText().trim());
-					String sam=D_ID1.getText().trim();
-			           ResultSet rs=stmt.executeQuery("select * from docimge where D_ID='"+sam+"'");
-			           System.out.println(rs.next());
-			           ///if(rs.next()){
-			        	   //byte[]imagedata =rs.getBytes("IMAGE");
-			        	   Blob blob =rs.getBlob(2);
-			        	   
-			        	  // byte barr[]=imagedata.getBytes(2,(int)imagedata.length());
-			              // ImageIcon pat=new ImageIcon(barr);
-			        	   ImageIcon imageIcon = new ImageIcon( blob.getBytes( 2, (int) blob.length() ) );
-			        	   System.out.println(blob.getBytes( 2, (int) blob.length() ));
-			               docimg1.setIcon(imageIcon);
-			         // }
-			           //else{
-			            //    JOptionPane.showMessageDialog(null,"No Specific Id Found");
-			          // }
-				}catch(Exception e){
-					e.printStackTrace();
-				}*/
+				
 				try{
 					Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
 					conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
@@ -1104,9 +1083,10 @@ public class Doctorspage extends JFrame {
 					city2.setText(rs3.getString(10));
 					username2.setText(rs3.getString(11));
 					password2.setText(rs3.getString(12));
+					doc_dept2.setSelectedItem(rs3.getString(14));
 					ResultSet rs4=stmt.executeQuery("select TO_CHAR(Joining_date,'DD-MM-YYYY') from dept where D_ID='"+id_update+"'");
 					rs4.next();
-					jng_date2.setText(rs4.getString(1));
+					//jng_date2.setText(rs4.getString(1));
 					
 					
 				}
@@ -1126,6 +1106,29 @@ public class Doctorspage extends JFrame {
 		button_6.setBounds(341, 125, 161, 33);
 		button_6.setBorder(br);
 		panel_5.add(button_6);
+		
+		JLabel label_13 = new JLabel("Department");
+		label_13.setForeground(new Color(0, 153, 255));
+		label_13.setFont(new Font("Tahoma", Font.BOLD, 16));
+		label_13.setBounds(356, 462, 107, 19);
+		panel_5.add(label_13);
+		
+		
+		
+		try{
+			Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
+			stmt = conn.createStatement();
+			
+			ResultSet rs=stmt.executeQuery("SELECT DEPT_NAME FROM Department_details ORDER BY dept_no ASC");
+			while(rs.next()){
+				
+				doc_dept2.addItem(rs.getString(1));
+				//comboBox.getSelectedItem();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
 		JLabel label_2 = new JLabel("");
 		label_2.setIcon(new ImageIcon("C:\\Users\\HP\\Desktop\\Hospital MAnagement System\\Images\\899156.jpg"));

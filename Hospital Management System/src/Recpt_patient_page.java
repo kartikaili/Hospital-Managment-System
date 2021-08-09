@@ -26,9 +26,13 @@ import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import com.toedter.calendar.JDateChooser;
 
 
 public class Recpt_patient_page extends JFrame {
@@ -75,6 +79,7 @@ public class Recpt_patient_page extends JFrame {
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 					frame.setResizable(false);
+					frame.showTableData();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -206,23 +211,23 @@ public class Recpt_patient_page extends JFrame {
 		JLabel label_8 = new JLabel("Phone Number");
 		label_8.setForeground(new Color(0, 153, 255));
 		label_8.setFont(new Font("Tahoma", Font.BOLD, 16));
-		label_8.setBounds(330, 183, 120, 19);
+		label_8.setBounds(640, 183, 120, 19);
 		panel_2.add(label_8);
 		
 		phno1 = new JTextField();
 		phno1.setColumns(10);
-		phno1.setBounds(473, 174, 167, 28);
+		phno1.setBounds(783, 174, 167, 28);
 		panel_2.add(phno1);
 		
 		JLabel label_9 = new JLabel("City");
 		label_9.setForeground(new Color(0, 153, 255));
 		label_9.setFont(new Font("Tahoma", Font.BOLD, 16));
-		label_9.setBounds(649, 177, 107, 19);
+		label_9.setBounds(0, 241, 107, 19);
 		panel_2.add(label_9);
 		
 		city1 = new JTextField();
 		city1.setColumns(10);
-		city1.setBounds(776, 174, 167, 28);
+		city1.setBounds(127, 238, 167, 28);
 		panel_2.add(city1);
 		
 		JLabel label_10 = new JLabel("Date");
@@ -239,25 +244,73 @@ public class Recpt_patient_page extends JFrame {
 		JLabel label_11 = new JLabel("Patient Type");
 		label_11.setForeground(new Color(0, 153, 255));
 		label_11.setFont(new Font("Tahoma", Font.BOLD, 16));
-		label_11.setBounds(10, 247, 107, 19);
+		label_11.setBounds(330, 243, 107, 19);
 		panel_2.add(label_11);
 		
-		JComboBox comboBox_2 = new JComboBox(new Object[]{});
-		comboBox_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		comboBox_2.setBackground(Color.WHITE);
-		comboBox_2.setBounds(133, 242, 167, 29);
-		panel_2.add(comboBox_2);
+		final JComboBox pt_bedno = new JComboBox(new Object[]{});
+		pt_bedno.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		pt_bedno.setBounds(783, 241, 167, 28);
+		panel_2.add(pt_bedno);
+		
+		final JComboBox pt_type = new JComboBox(new Object[]{});
+		pt_type.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String vl=(String) pt_type.getItemAt(pt_type.getSelectedIndex());
+				if(vl.equals("ICU")){
+					pt_bedno.removeAllItems();
+					try{
+						Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
+						conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
+						stmt = conn.createStatement();
+						ResultSet rs=stmt.executeQuery("select Bed_NO from Bed_details where category='"+vl+"' order by Bed_NO asc");
+						while(rs.next()){
+							pt_bedno.addItem(rs.getString(1));
+						}
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				}else if(vl.equals("General ward")){
+					pt_bedno.removeAllItems();
+					try{
+						Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
+						conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
+						stmt = conn.createStatement();
+						ResultSet rs=stmt.executeQuery("select Bed_NO from Bed_details where category='"+vl+"' order by Bed_NO asc");
+						while(rs.next()){
+							pt_bedno.addItem(rs.getString(1));
+						}
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				}else if(vl.equals("Special ward")){
+					pt_bedno.removeAllItems();
+					try{
+						Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
+						conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
+						stmt = conn.createStatement();
+						ResultSet rs=stmt.executeQuery("select Bed_NO from Bed_details where category='"+vl+"' order by Bed_NO asc");
+						while(rs.next()){
+							pt_bedno.addItem(rs.getString(1));
+						}
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				}else{
+					pt_type.removeAllItems();
+				}
+			}
+		});
+		pt_type.setModel(new DefaultComboBoxModel(new String[] {"ICU", "Special ward", "General ward"}));
+		pt_type.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		pt_type.setBackground(Color.WHITE);
+		pt_type.setBounds(453, 238, 167, 29);
+		panel_2.add(pt_type);
 		
 		JLabel label_12 = new JLabel("Bed No");
 		label_12.setForeground(new Color(0, 153, 255));
 		label_12.setFont(new Font("Tahoma", Font.BOLD, 16));
-		label_12.setBounds(355, 247, 120, 19);
+		label_12.setBounds(655, 246, 120, 19);
 		panel_2.add(label_12);
-		
-		JComboBox comboBox_3 = new JComboBox(new Object[]{});
-		comboBox_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		comboBox_3.setBounds(483, 242, 167, 28);
-		panel_2.add(comboBox_3);
 		
 		final JComboBox bldgrp1 = new JComboBox(new Object[]{});
 		bldgrp1.setModel(new DefaultComboBoxModel(new String[] {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"}));
@@ -271,6 +324,12 @@ public class Recpt_patient_page extends JFrame {
 		gdr1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		gdr1.setBounds(766, 65, 167, 28);
 		panel_2.add(gdr1);
+		
+		final JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBackground(Color.WHITE);
+		dateChooser.setBounds(314, 174, 167, 28);
+		panel_2.add(dateChooser);
+		
 		
 		JButton button = new JButton("ADD Patient");
 		button.addActionListener(new ActionListener() {
@@ -293,9 +352,13 @@ public class Recpt_patient_page extends JFrame {
 						String adrs=address1.getText();
 						long phno=Long.parseLong(phno1.getText());
 						String cty=city1.getText();
-						String pdate=pdate1.getText().trim();
+						SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+						String pdate=sdf.format(dateChooser.getDate());
 						//DD-MM-YYYY
-						int patient_insert=stmt.executeUpdate("insert into patient_details values('"+pid+"','"+fname+"','"+lname+"','"+Age+"','"+bld_grp+"','"+gendr+"','"+adrs+"','"+phno+"','"+cty+"', TO_DATE('"+pdate+"','YYYY-MM-DD'))");
+						String ptype=(String) pt_type.getItemAt(pt_type.getSelectedIndex());
+						String pbed=(String) pt_bedno.getItemAt(pt_bedno.getSelectedIndex());
+						
+						int patient_insert=stmt.executeUpdate("insert into patient_details values('"+pid+"','"+fname+"','"+lname+"','"+Age+"','"+bld_grp+"','"+gendr+"','"+adrs+"','"+phno+"','"+cty+"', TO_DATE('"+pdate+"','DD-MM-YYYY'),'"+ptype+"','"+pbed+"')");
 						if(patient_insert==1){
 							JOptionPane.showMessageDialog(null,"Record Inserted Sucessfully");
 							showTableData();
@@ -305,7 +368,10 @@ public class Recpt_patient_page extends JFrame {
 					}
 					
 					
-				}catch(Exception e){
+				}catch(NumberFormatException e){
+					JOptionPane.showMessageDialog(null,"Fields should not be empty");
+				}
+				catch(Exception e){
 					e.printStackTrace();
 				}
 			}
@@ -339,6 +405,8 @@ public class Recpt_patient_page extends JFrame {
 						JOptionPane.showMessageDialog(null, "patient ID does not Exist");
 					}
 					
+				}catch(SQLException e){
+					JOptionPane.showMessageDialog(null, "Patient cannot be deleted because he has been appointed with doctor");
 				}catch(Exception e){
 					e.printStackTrace();
 				}
@@ -369,8 +437,11 @@ public class Recpt_patient_page extends JFrame {
 						String adrs=address1.getText();
 						long phno=Long.parseLong(phno1.getText());
 						String cty=city1.getText();
-						String pdate=pdate1.getText().trim();
-						int result_upt=stmt.executeUpdate("update patient_details set FNAME='"+fname+"', LNAME='"+lname+"',AGE='"+Age+"', BLD_GRP='"+bld_grp+"', GENDER='"+gendr+"',ADDRESS='"+adrs+"', PHONE_NO='"+phno+"', CITY='"+cty+"',P_DATE=TO_DATE('"+pdate+"','YYYY-MM-DD') where P_ID='"+pid+"'");
+						SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+						String pdate=sdf.format(dateChooser.getDate());
+						String ptype=(String) pt_type.getItemAt(pt_type.getSelectedIndex());
+						String pbed=(String) pt_bedno.getItemAt(pt_bedno.getSelectedIndex());
+						int result_upt=stmt.executeUpdate("update patient_details set FNAME='"+fname+"', LNAME='"+lname+"',AGE='"+Age+"', BLD_GRP='"+bld_grp+"', GENDER='"+gendr+"',ADDRESS='"+adrs+"', PHONE_NO='"+phno+"', CITY='"+cty+"',P_DATE=TO_DATE('"+pdate+"','DD-MM-YYYY'),PATIENT_TYPE='"+ptype+"', PATIENT_BEDNO='"+pbed+"' where P_ID='"+pid+"'");
 						if(result_upt==1){
 							JOptionPane.showMessageDialog(null, "Records Updated");
 							showTableData();
@@ -393,7 +464,7 @@ public class Recpt_patient_page extends JFrame {
 		panel_2.add(btnUpdatePatient);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(29, 359, 867, 218);
+		scrollPane.setBounds(29, 359, 1200, 218);
 		panel_2.add(scrollPane);
 		
 		table = new JTable();
@@ -412,8 +483,53 @@ public class Recpt_patient_page extends JFrame {
 				phno1.setText(tbl.getValueAt(SelectedRow, 7).toString());
 				city1.setText(tbl.getValueAt(SelectedRow, 8).toString());
 				pdate1.setText(tbl.getValueAt(SelectedRow, 9).toString());
+				pt_type.setSelectedItem(tbl.getValueAt(SelectedRow, 10));
+				String bedno=(String) tbl.getValueAt(SelectedRow, 10);
 				
-				
+				if(bedno.equals("ICU")){
+					pt_bedno.removeAllItems();
+					try{
+						Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
+						conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
+						stmt = conn.createStatement();
+						ResultSet rs=stmt.executeQuery("select Bed_NO from Bed_details where category='"+bedno+"' order by Bed_NO asc");
+						while(rs.next()){
+							pt_bedno.addItem(rs.getString(1));
+						}
+						pt_bedno.setSelectedItem(tbl.getValueAt(SelectedRow, 11));
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				}else if(bedno.equals("General ward")){
+					pt_bedno.removeAllItems();
+					try{
+						Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
+						conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
+						stmt = conn.createStatement();
+						ResultSet rs=stmt.executeQuery("select Bed_NO from Bed_details where category='"+bedno+"' order by Bed_NO asc");
+						while(rs.next()){
+							pt_bedno.addItem(rs.getString(1));
+						}
+						pt_bedno.setSelectedItem(tbl.getValueAt(SelectedRow, 11));
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				}
+				else if(bedno.equals("Special ward")){
+					pt_bedno.removeAllItems();
+					try{
+						Class.forName("oracle.jdbc.driver.OracleDriver");	//using oracle
+						conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","2820");
+						stmt = conn.createStatement();
+						ResultSet rs=stmt.executeQuery("select Bed_NO from Bed_details where category='"+bedno+"' order by Bed_NO asc");
+						while(rs.next()){
+							pt_bedno.addItem(rs.getString(1));
+						}
+						pt_bedno.setSelectedItem(tbl.getValueAt(SelectedRow, 11));
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				}
 			}
 		});
 		table.setModel(new DefaultTableModel(
@@ -434,8 +550,9 @@ public class Recpt_patient_page extends JFrame {
 		});
 		btnDisplaypatients.setForeground(new Color(30, 144, 255));
 		btnDisplaypatients.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnDisplaypatients.setBounds(952, 362, 185, 33);
+		btnDisplaypatients.setBounds(529, 315, 185, 33);
 		panel_2.add(btnDisplaypatients);
+		
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(Recpt_patient_page.class.getResource("/Images/patientbackground1.jpg")));

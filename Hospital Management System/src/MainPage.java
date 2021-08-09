@@ -106,6 +106,11 @@ public class MainPage extends JFrame {
 		JButton btnDoctor = new JButton("DOCTOR");
 		btnDoctor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				Doctor_Login dl=new Doctor_Login();
+				dl.setVisible(true);
+				dl.setLocationRelativeTo(null);
+				dl.setResizable(false);
+				dispose();
 			}
 		});
 		btnDoctor.setOpaque(true);
@@ -122,6 +127,15 @@ public class MainPage extends JFrame {
 		panel.add(label_3);
 		
 		JButton btnPharmacy = new JButton("PHARMACY");
+		btnPharmacy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Pharmacy p=new Pharmacy();
+				p.setVisible(true);
+				p.setLocationRelativeTo(null);
+				p.setResizable(false);
+				dispose();
+			}
+		});
 		btnPharmacy.setOpaque(true);
 		btnPharmacy.setForeground(new Color(0, 153, 255));
 		btnPharmacy.setFont(new Font("Tahoma", Font.PLAIN, 16));
